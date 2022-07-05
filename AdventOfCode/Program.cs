@@ -15,7 +15,8 @@ namespace AdventOfCode
             //  dayOne.ExerciseOneSolution();
             //  dayOne.ExerciseTwoSolution();
             DayTwo dayTwo = new DayTwo();
-            dayTwo.PartOneSolution();
+          //  dayTwo.PartOneSolution();
+            dayTwo.PartTwoSolution();
             
         }
       
@@ -113,7 +114,16 @@ namespace AdventOfCode
        public void PartOneSolution()
         {
             SplitItems();
-            MoveSubmarine();
+            MoveSubmarine(false);
+            Console.WriteLine($"Horizontal:{horizontalTotal}");
+            Console.WriteLine($"Depth: {depthTotal}");
+            result = depthTotal * horizontalTotal;
+            Console.WriteLine(result);
+        }
+        public void PartTwoSolution()
+        {
+            SplitItems();
+            MoveSubmarine(true);
             Console.WriteLine($"Horizontal:{horizontalTotal}");
             Console.WriteLine($"Depth: {depthTotal}");
             result = depthTotal * horizontalTotal;
@@ -127,7 +137,7 @@ namespace AdventOfCode
         int horizontalTotal = 0;
         int depthTotal= 0;
         int result;
-        
+        int aim = 0;
         
         void SplitItems()
         {
@@ -140,7 +150,7 @@ namespace AdventOfCode
             }
         }
 
-        void MoveSubmarine()
+        void MoveSubmarine(bool partTwo)
         {
             for(int i = 0; i<direction.Count; i++)
             {
@@ -148,12 +158,33 @@ namespace AdventOfCode
                 {
                     case "forward":
                         horizontalTotal += amount[i];
+                        if (partTwo)
+                        {
+                            depthTotal = depthTotal + (aim * amount[i]);
+                        }
+                        
                         break;
                     case "down":
-                        depthTotal += amount[i];
+                        
+                        if (partTwo)
+                        {
+                            aim += amount[i];
+                        }
+                        else
+                        {
+                            depthTotal += amount[i];
+                        }
                         break;
                     case "up":
-                        depthTotal -= amount[i];
+                      
+                        if (partTwo)
+                        {
+                            aim -= amount[i];
+                        }
+                        else
+                        {
+                            depthTotal -= amount[i];
+                        }
                         break;
 
                 }
