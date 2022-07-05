@@ -7,25 +7,32 @@ namespace AdventOfCode
 {
     class Program
     {
-        
 
+      
         static void Main(string[] args)
         {
             DayOne dayOne = new DayOne();
-          //  dayOne.ExerciseOneSolution();
-            dayOne.ExerciseTwoSolution();
+            //  dayOne.ExerciseOneSolution();
+            //  dayOne.ExerciseTwoSolution();
+            DayTwo dayTwo = new DayTwo();
+            dayTwo.PartOneSolution();
+            
         }
-       
-        
+      
     }
 
     class DayOne
     {
-       string path = AppDomain.CurrentDomain.BaseDirectory;
+        #region Problem url(Input file at base folder)
+        /* https://adventofcode.com/2021/day/1#part2 */
+        #endregion
+
+
+        FileManager<int> fm = new FileManager<int>();
         //Exercise One.
        public void ExerciseOneSolution()
         {
-            int result = IncreasedCounter(Lines());
+            int result = IncreasedCounter(fm.Lines("day1.txt"));
             Console.WriteLine(result);
             Console.ReadKey();
         }
@@ -39,28 +46,13 @@ namespace AdventOfCode
             testList.Add(2);
             testList.Add(1);
             testList.Add(0);
-            AddWindowValues(Lines());
+            AddWindowValues(fm.Lines("day1.txt"));
             int result  = IncreasedCounter(windows);
             Console.WriteLine(result);
             
             Console.ReadKey();
         }
-       List<int> Lines()
-        {
-
-            List<int> lines = new List<int>();
-            
-            using (StreamReader reader = new StreamReader(Path.Combine(path, "day1.txt")))
-            {
-                while (!reader.EndOfStream)
-                {
-                    lines.Add(Convert.ToInt32(reader.ReadLine()));
-
-                }
-            }
-
-            return lines;
-        }
+      
        int IncreasedCounter(List<int> values)
         {
             int counter = 0;
@@ -111,6 +103,86 @@ namespace AdventOfCode
         }
 
 
-        //Exercise Two.
+     
+    }
+  
+
+    class DayTwo
+    {
+        
+       public void PartOneSolution()
+        {
+            SplitItems();
+            MoveSubmarine();
+            Console.WriteLine($"Horizontal:{horizontalTotal}");
+            Console.WriteLine($"Depth: {depthTotal}");
+            result = depthTotal * horizontalTotal;
+            Console.WriteLine(result);
+        }
+        static string fileName = "day2.txt";
+        FileManager<string> fm = new FileManager<string>();
+        char separator = ' ';
+        List<string> direction = new List<string>();
+        List<int> amount = new List<int>();
+        int horizontalTotal = 0;
+        int depthTotal= 0;
+        int result;
+        
+        
+        void SplitItems()
+        {
+            List<string> values = fm.Lines(fileName); 
+            foreach(string v in values)
+            {
+                string[] rawText = v.Split(separator);
+                direction.Add(rawText[0]);
+                amount.Add(Convert.ToInt32(rawText[1]));
+            }
+        }
+
+        void MoveSubmarine()
+        {
+            for(int i = 0; i<direction.Count; i++)
+            {
+                switch (direction[i])
+                {
+                    case "forward":
+                        horizontalTotal += amount[i];
+                        break;
+                    case "down":
+                        depthTotal += amount[i];
+                        break;
+                    case "up":
+                        depthTotal -= amount[i];
+                        break;
+
+                }
+            }
+        }
+
+        
+
+    }
+    public class FileManager <T> 
+    {
+        static string path = AppDomain.CurrentDomain.BaseDirectory;
+        public List<T> Lines(string dayText)
+        {
+
+            List<T> lines = new List<T>();
+
+            using (StreamReader reader = new StreamReader(Path.Combine(path, dayText)))
+            {
+                while (!reader.EndOfStream)
+                {
+                    T value = (T)Convert.ChangeType(reader.ReadLine(), typeof(T));
+                    
+                    lines.Add((T)value);
+
+                }
+            }
+
+            return lines;
+        }
     }
 }
