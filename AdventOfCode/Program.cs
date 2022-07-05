@@ -15,9 +15,11 @@ namespace AdventOfCode
             //  dayOne.ExerciseOneSolution();
             //  dayOne.ExerciseTwoSolution();
             DayTwo dayTwo = new DayTwo();
-          //  dayTwo.PartOneSolution();
-            dayTwo.PartTwoSolution();
-            
+            //  dayTwo.PartOneSolution();
+            // dayTwo.PartTwoSolution();
+            DayThree dayThree = new DayThree();
+            dayThree.PartOneSolution();
+
         }
       
     }
@@ -188,19 +190,119 @@ namespace AdventOfCode
     }
     class DayThree
     {
+        public void PartOneSolution()
+        {
+          int gamma = ToDecimal(Gamma());
+          int epsilon = ToDecimal(Epsilon());
+          int result = gamma * epsilon;
+            Console.WriteLine(result);
+        }
        static string path = "day3.txt";
         FileManager<string> fm = new AdventOfCode.FileManager<string>();
-        int Gamma()
+
+
+
+        string Gamma()
         {
+            string result = "";
+            List<string> values = fm.Lines("day3.txt");  
+           
+            int index = 0;
+            int indexMax = values[0].Length;
+           
+            int zeroes = 0;
+            int ones = 0;
+           
+            for(int a= 0;a < indexMax; a++)
+            {
+                for (int i = 0; i < values.Count; i++)
+                {
+                    char digit = (values[i])[a];
+                    if(digit == '1')
+                    {
+                        ones++;
+                    }
+                    else
+                    {
+                        zeroes ++;
+                    }
+                }
+                if(ones > zeroes)
+                {
+                    result += "0";
+                }
+                else
+                {
+                    result += "1";
+                }
+                zeroes = 0;
+                ones = 0;
+            }
+           
+            
+            Console.WriteLine("Gamma: " + result);
+            return result;
+        }
+        string Epsilon()
+        {
+            string result = "";
             List<string> values = fm.Lines("day3.txt");
 
-                
+            int index = 0;
+            int indexMax = values[0].Length;
+            
+            int zeroes = 0;
+            int ones = 0;
+
+            for (int a = 0; a < indexMax; a++)
+            {
+                for (int i = 0; i < values.Count; i++)
+                {
+                    char digit = (values[i])[a];
+                    if (digit == '1')
+                    {
+                        ones++;
+                    }
+                    else
+                    {
+                        zeroes++;
+                    }
+                }
+                if (ones > zeroes)
+                {
+                    result += "1";
+                }
+                else
+                {
+                    result += "0";
+                }
+                zeroes = 0;
+                ones = 0;
+            }
 
 
+            Console.WriteLine("Epsilon: " + result);
+            return result;
+        }
+        int ToDecimal(string input)
+        {
+           
+            int power = 1;
+            int result = 0;
+            for(int i = input.Length -1 ; i>= 0; i--)
+            {
+                if(input[i] == '1')
+                {
+                    result += power;
+                }
+                power *= 2;
+            }
 
-            return 0;
+            return result;
         }
     }
+
+
     public class FileManager <T> 
     {
         static string path = AppDomain.CurrentDomain.BaseDirectory;
