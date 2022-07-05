@@ -39,14 +39,8 @@ namespace AdventOfCode
         }
         public void ExerciseTwoSolution()
         {
-            List<int> testList = new List<int>();
-            testList.Add(9);
-            testList.Add(5);
-            testList.Add(2);
-            testList.Add(3);
-            testList.Add(2);
-            testList.Add(1);
-            testList.Add(0);
+           
+           
             AddWindowValues(fm.Lines("day1.txt"));
             int result  = IncreasedCounter(windows);
             Console.WriteLine(result);
@@ -106,8 +100,6 @@ namespace AdventOfCode
 
      
     }
-  
-
     class DayTwo
     {
         
@@ -193,6 +185,21 @@ namespace AdventOfCode
 
         
 
+    }
+    class DayThree
+    {
+       static string path = "day3.txt";
+        FileManager<string> fm = new AdventOfCode.FileManager<string>();
+        int Gamma()
+        {
+            List<string> values = fm.Lines("day3.txt");
+
+                
+
+
+
+            return 0;
+        }
     }
     public class FileManager <T> 
     {
