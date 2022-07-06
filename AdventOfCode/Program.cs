@@ -19,6 +19,8 @@ namespace AdventOfCode
             // dayTwo.PartTwoSolution();
             DayThree dayThree = new DayThree();
             dayThree.PartOneSolution();
+            dayThree.PartTwoSolution();
+            
 
         }
       
@@ -192,57 +194,225 @@ namespace AdventOfCode
     {
         public void PartOneSolution()
         {
-          int gamma = ToDecimal(Gamma());
-          int epsilon = ToDecimal(Epsilon());
-          int result = gamma * epsilon;
+          long gamma = ToDecimal(Gamma());
+          long epsilon = ToDecimal(Epsilon());
+          long result = gamma * epsilon;
             Console.WriteLine(result);
+        }
+        public void PartTwoSolution()
+        {
+            Console.WriteLine($"OX B:{OxigenGeneratorRating()}");
+            long oxigenDecimal = ToDecimal(OxigenGeneratorRating());
+            Console.WriteLine($"OX D:{oxigenDecimal}");
+            Console.WriteLine($"CO2 B:{CO2ScrubbingRating()}");
+            long CO2Decimal = ToDecimal(CO2ScrubbingRating());
+            Console.WriteLine($"OX D:{CO2Decimal}");
+
+          long result = oxigenDecimal * CO2Decimal;
+           Console.WriteLine($"Result: {result}");
+
         }
        static string path = "day3.txt";
         FileManager<string> fm = new AdventOfCode.FileManager<string>();
+        char findCommonBit(string row, int function)
+        {
+
+            
+            char commonBit = ' ';
+            int zeroes = 0;
+            int ones = 0;
+
+            for (int i = 0; i < row.Length; i++)
+            {
+                char digit = row[i];
+                if (digit == '1')
+                {
+                    ones++;
+                }
+                else
+                {
+                    zeroes++;
+                }
+                
+            }
+            switch(function) {
+                //gamma-epsilon
+                case 0:
+                    if (ones > zeroes)
+                    {
+                        commonBit = '1';
+                    }
+                    else
+                    {
+                        commonBit = '0';
+                    }
+                    break;
+                //oxigenRate
+                case 1:
+                    if (ones >= zeroes)
+                    {
+                        commonBit = '1';
+                    }
+                    else
+                    {
+                        commonBit = '0';
+                    }
+                    break;
+                    //CO2Rate
+                case 2:
+                    if (ones >= zeroes)
+                    {
+                        commonBit = '1';
+                    }
+                    else
+                    {
+                        commonBit = '0';
+                    }
+                    break;
+
+            }
+            
+                
+
+           
+            return commonBit;
+        }
+
+       public string OxigenGeneratorRating()
+        {
+            List<string> values = fm.Lines(path);
+            
+            int index = 0;
+            int indexMax = values[0].Length;
+            string result = "";
+            
+            for (int a = index; a < indexMax ; a++)
+            {
+               
+                char commonBit = ' ';
+                string row = "";
+                for (int i = 0; i < values.Count ; i++)
+                {
+
+                    row += (values[i])[a];
+
+                }
+                
+                commonBit = findCommonBit(row, 1);
+                if(values.Count > 1)
+                {
+                    for (int f = values.Count - 1; f >= 0; f--)
+                    {
+
+                        if ((values[f])[a] == commonBit)
+                        {
+
+                            values.RemoveAt(f);
+
+                        }
+                    }
+                }
+                
+               
+            }
+            foreach(string c in values)
+            {
+                Console.WriteLine(c);
+            }
+            return values[0];
 
 
+            
+            
+
+
+
+
+            
+        }
+
+
+        public string CO2ScrubbingRating()
+        {
+            List<string> values = fm.Lines(path);
+            List<string> filteredValues = new List<string>();
+            int index = 0;
+            int indexMax = values[0].Length;
+            string result = "";
+
+            for (int a = index; a < indexMax; a++)
+            {
+
+                char commonBit = ' ';
+                string row = "";
+                for (int i = 0; i < values.Count; i++)
+                {
+
+                    row += (values[i])[a];
+
+                }
+
+                commonBit = findCommonBit(row, 2);
+                if(values.Count > 1)
+                {
+
+                for (int f = values.Count - 1; f >= 0; f--)
+                {
+
+                    if ((values[f])[a] != commonBit)
+                    {
+                      
+                        values.RemoveAt(f);
+
+                    }
+                }
+                }
+
+            }
+           
+            return values[0];
+
+
+
+
+
+        }
 
         string Gamma()
         {
             string result = "";
-            List<string> values = fm.Lines("day3.txt");  
-           
+            List<string> values = fm.Lines("day3.txt");
+
             int index = 0;
             int indexMax = values[0].Length;
-           
-            int zeroes = 0;
-            int ones = 0;
-           
-            for(int a= 0;a < indexMax; a++)
+
+
+            for (int a = 0; a < indexMax; a++)
             {
+                string row = "";
                 for (int i = 0; i < values.Count; i++)
                 {
-                    char digit = (values[i])[a];
-                    if(digit == '1')
-                    {
-                        ones++;
-                    }
-                    else
-                    {
-                        zeroes ++;
-                    }
+                    
+                    row += (values[i])[a];
+                   
                 }
-                if(ones > zeroes)
+                if(findCommonBit(row, 0) == '1')
                 {
-                    result += "0";
+                    result += '1';
                 }
                 else
                 {
-                    result += "1";
+                    result += '0';
                 }
-                zeroes = 0;
-                ones = 0;
+                
             }
-           
-            
+
+
             Console.WriteLine("Gamma: " + result);
             return result;
         }
+     
+
         string Epsilon()
         {
             string result = "";
@@ -250,45 +420,37 @@ namespace AdventOfCode
 
             int index = 0;
             int indexMax = values[0].Length;
-            
-            int zeroes = 0;
-            int ones = 0;
+
 
             for (int a = 0; a < indexMax; a++)
             {
+                string row = "";
                 for (int i = 0; i < values.Count; i++)
                 {
-                    char digit = (values[i])[a];
-                    if (digit == '1')
-                    {
-                        ones++;
-                    }
-                    else
-                    {
-                        zeroes++;
-                    }
+
+                    row += (values[i])[a];
+
                 }
-                if (ones > zeroes)
+                if (findCommonBit(row, 0) == '1')
                 {
-                    result += "1";
+                    result += '0';
                 }
                 else
                 {
-                    result += "0";
+                    result += '1';
                 }
-                zeroes = 0;
-                ones = 0;
+
             }
 
 
-            Console.WriteLine("Epsilon: " + result);
+            Console.WriteLine("Epsilon " + result);
             return result;
         }
-        int ToDecimal(string input)
+        long ToDecimal(string input)
         {
            
-            int power = 1;
-            int result = 0;
+            long power = 1;
+            long result = 0;
             for(int i = input.Length -1 ; i>= 0; i--)
             {
                 if(input[i] == '1')
@@ -302,6 +464,10 @@ namespace AdventOfCode
         }
     }
 
+    class DayFour
+    {
+
+    }
 
     public class FileManager <T> 
     {
